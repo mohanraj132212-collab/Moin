@@ -3,767 +3,515 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>C. அழகர்சந்தர்
-கேட்டரிங் & சர்வீஸ்</title>
-
+<title>C. அழகர்சந்தர் கேட்டரிங் & சர்வீஸ்</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;600;700&display=swap" rel="stylesheet">
-
-<!-- html2pdf -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
 <style>
-
-:root{
-  --red:#b91c1c;
-  --green:#166534;
-  --green-light:#dcfce7;
-  --gold:#92400e;
-  --cream:#fffbf5;
-  --border:#d1d5db;
-  --text:#1c1917;
+:root {
+  --red: #b91c1c;
+  --red-dark: #991b1b;
+  --green: #166534;
+  --green-light: #dcfce7;
+  --green-mid: #15803d;
+  --gold: #92400e;
+  --gold-light: #fef3c7;
+  --cream: #fffbf5;
+  --white: #ffffff;
+  --border: #e5e7eb;
+  --text: #1c1917;
+  --muted: #6b7280;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
 }
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Noto Sans Tamil',sans-serif;
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans Tamil', sans-serif; }
+
+body { background: linear-gradient(135deg, #fff7ed 0%, #fef9f0 50%, #f0fdf4 100%); min-height: 100vh; padding: 24px 16px; }
+
+.container { max-width: 860px; margin: auto; }
+
+/* ── HEADER ── */
+.header {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 28px 24px 20px;
+  text-align: center;
+  margin-bottom: 18px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--red), #f97316, #eab308, var(--green));
+}
+.header-icon {
+  width: 64px; height: 64px;
+  background: linear-gradient(135deg, var(--green), var(--green-mid));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 14px;
+  font-size: 28px;
+}
+.header h1 { color: var(--green); font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.header .sub { color: var(--muted); font-size: 14px; margin-bottom: 6px; }
+.header .phone {
+  display: inline-block;
+  background: var(--gold-light);
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 14px;
+  border-radius: 20px;
+  border: 1px solid #fde68a;
 }
 
-body{
-  background:var(--cream);
-  padding:30px 20px;
+/* ── CONTROLS ── */
+.controls {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.btn {
+  border: none;
+  padding: 12px 8px;
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 13px;
+  font-family: 'Noto Sans Tamil', sans-serif;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: opacity 0.15s, transform 0.1s;
+}
+.btn:active { transform: scale(0.97); opacity: 0.9; }
+.btn-start  { background: var(--green); }
+.btn-stop   { background: var(--red); }
+.btn-pdf    { background: var(--gold); }
+.btn-clear  { background: #6b7280; }
+.btn-add    { grid-column: span 4; background: linear-gradient(90deg, #ea580c, #f97316); font-size: 14px; padding: 13px; }
+
+/* ── DATE ROW ── */
+.date-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+}
+.date-row label { font-size: 14px; font-weight: 600; color: var(--green); white-space: nowrap; }
+.date-row input[type="date"] {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: 'Noto Sans Tamil', sans-serif;
+  color: var(--text);
+  background: #f9fafb;
+  outline: none;
+  cursor: pointer;
+}
+.date-row input[type="date"]:focus { border-color: var(--green); background: var(--white); }
+
+/* ── STATUS ── */
+.status-bar {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 18px;
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: var(--shadow);
+}
+.status-dot {
+  width: 10px; height: 10px; border-radius: 50%; background: #d1d5db; flex-shrink: 0;
+}
+.status-dot.active { background: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,0.25); animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{box-shadow:0 0 0 3px rgba(34,197,94,0.2)} 50%{box-shadow:0 0 0 6px rgba(34,197,94,0.1)} }
+#statusText { color: var(--text); font-size: 14px; font-weight: 600; }
+
+/* ── SPOKEN BOX ── */
+.spoken-box {
+  background: var(--white);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--red);
+  padding: 14px 16px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow);
+}
+.spoken-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 6px; }
+#spokenText { font-size: 16px; color: var(--text); min-height: 24px; }
+
+/* ── GUEST SECTION ── */
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.section-title { color: var(--green); font-size: 17px; font-weight: 700; }
+.badge {
+  background: var(--green-light);
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid #86efac;
 }
 
-.container{
-  max-width:900px;
-  margin:auto;
+/* ── GUEST GRID ── */
+#nameList {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
 }
 
-.app-card{
-  background:white;
-  border-radius:14px;
-  border-top:4px solid var(--red);
-  padding:28px;
-  box-shadow:0 4px 20px rgba(0,0,0,0.08);
+.name-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  position: relative;
+}
+.name-card:hover { border-color: #86efac; box-shadow: 0 2px 10px rgba(22,101,52,0.1); }
+.name-card.selected {
+  background: var(--green-light);
+  border: 2px solid var(--green);
 }
 
-.app-header{
-  text-align:center;
-  margin-bottom:25px;
+.name-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, #bbf7d0, #86efac);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; color: var(--green);
+  flex-shrink: 0;
+}
+.name-card.selected .name-avatar {
+  background: linear-gradient(135deg, var(--green), var(--green-mid));
+  color: white;
 }
 
-.app-header h1{
-  color:var(--green);
-  margin-bottom:10px;
+.name-label { flex: 1; font-size: 14px; color: var(--text); font-weight: 600; }
+
+.name-check {
+  width: 18px; height: 18px;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.name-card.selected .name-check {
+  background: var(--green);
+  border-color: var(--green);
+}
+.name-card.selected .name-check::after {
+  content: '✓';
+  color: white;
+  font-size: 12px;
 }
 
-.app-header p{
-  color:#666;
+.delete-btn {
+  position: absolute;
+  top: 6px; right: 6px;
+  width: 22px; height: 22px;
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  border-radius: 6px;
+  color: var(--red);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s;
+  line-height: 1;
+}
+.name-card:hover .delete-btn { opacity: 1; }
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 24px;
+  padding: 16px;
 }
 
-.controls{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:10px;
-  margin-bottom:20px;
+/* ── EMPTY STATE ── */
+.empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 36px;
+  color: var(--muted);
+  font-size: 15px;
 }
-
-.btn{
-  border:none;
-  padding:11px 20px;
-  border-radius:8px;
-  color:white;
-  cursor:pointer;
-  font-weight:bold;
-}
-
-.start-btn{
-  background:var(--green);
-}
-
-.stop-btn{
-  background:var(--red);
-}
-
-.pdf-btn{
-  background:var(--gold);
-}
-
-.clear-btn{
-  background:#6b7280;
-}
-
-.add-btn{
-  background:#ea580c;
-}
-
-.status{
-  background:#fef3c7;
-  padding:12px;
-  border-radius:8px;
-  text-align:center;
-  margin-bottom:18px;
-  font-weight:bold;
-}
-
-.spoken-box{
-  background:#f8fafc;
-  border-left:4px solid var(--red);
-  padding:14px;
-  border-radius:8px;
-  margin-bottom:20px;
-}
-
-#spokenText{
-  margin-top:8px;
-  font-size:18px;
-}
-
-.section-title{
-  color:var(--green);
-  font-size:20px;
-  margin-bottom:15px;
-}
-
-#nameList{
-  list-style:none;
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-  gap:10px;
-}
-
-.name-item{
-  background:#fafafa;
-  border:1px solid var(--border);
-  border-radius:8px;
-  padding:12px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  cursor:pointer;
-}
-
-.name-item.selected{
-  background:var(--green-light);
-  border:2px solid var(--green);
-}
-
-.name-item input{
-  width:18px;
-  height:18px;
-}
-
-.footer{
-  margin-top:30px;
-  text-align:center;
-  color:#777;
-}
-
 </style>
 </head>
-
 <body>
-
 <div class="container">
 
-<div class="app-card">
+  <!-- HEADER -->
+  <div class="header">
+    <h1>C. அழகர்சந்தர் கேட்டரிங் & சர்வீஸ்</h1>
+    <p class="sub">பளுவஞ்சி, மருங்காபுரி தாலுகா, திருச்சி மாவட்டம்</p>
+    <span class="phone">📞 9894271043 | 9944973450 | 7708759017</span>
+  </div>
 
-<div class="app-header">
+  <!-- CONTROLS -->
+  <div class="controls">
+    <button class="btn btn-start" id="startBtn">🎙 ஆரம்பி</button>
+    <button class="btn btn-stop"  id="stopBtn">⏹ நிறுத்து</button>
+    <button class="btn btn-pdf"   id="downloadBtn">📄 PDF</button>
+    <button class="btn btn-clear" id="clearBtn">🗑 துடை</button>
+    <button class="btn btn-add"   id="addBtn">+ புதிய பெயர் சேர்</button>
+  </div>
 
-<h1>
-C. அழகர்சந்தர்
-கேட்டரிங் & சர்வீஸ்
-</h1>
+  <!-- DATE ROW -->
+  <div class="date-row">
+    <label>📅 தேதி:</label>
+    <input type="date" id="eventDate">
+  </div>
 
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <div class="status-dot" id="statusDot"></div>
+    <span id="statusText">தொடங்க காத்திருக்கிறது...</span>
+  </div>
 
+  <!-- SPOKEN TEXT -->
+  <div class="spoken-box">
+    <div class="spoken-label">கடைசியாக கேட்கப்பட்டது</div>
+    <div id="spokenText">---</div>
+  </div>
 
-</div>
+  <!-- GUEST LIST -->
+  <div class="section-header">
+    <span class="section-title">விருந்தினர் பட்டியல்</span>
 
-<div class="controls">
+  </div>
 
-<button
-class="btn start-btn"
-id="startBtn">
-Start
-</button>
+  <ul id="nameList">
+    <li class="empty">பட்டியல் ஏற்றப்படுகிறது...</li>
+  </ul>
 
-<button
-class="btn stop-btn"
-id="stopBtn">
-Stop
-</button>
+  <div class="footer">Firebase குரல் அடையாள அமைப்பு</div>
 
-<button
-class="btn pdf-btn"
-id="downloadBtn">
-Download PDF
-</button>
-
-<button
-class="btn clear-btn"
-id="clearBtn">
- Clear
-</button>
-
-<button
-class="btn add-btn"
-id="addBtn">
-New Menu
-</button>
-
-</div>
-
-<div
-class="status"
-id="status">
-
- Waiting to start...
-
-</div>
-
-<div class="spoken-box">
-
-<h3>
-Last Spoken Text
-</h3>
-
-<div id="spokenText">
----
-</div>
-
-</div>
-
-<div class="section-title">
-Guest List
-</div>
-
-<ul id="nameList"></ul>
-
-<div class="footer">
-Firebase Voice Recognition System
-</div>
-
-</div>
 </div>
 
 <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, push, remove, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-// FIREBASE
-import { initializeApp }
-
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-
-getDatabase,
-ref,
-push,
-onValue
-
-}
-
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-// FIREBASE CONFIG
 const firebaseConfig = {
-
-apiKey:
-"AIzaSyDfECeMe-lm4aV8Ft8PAEBG1GQNFGuepl4",
-
-authDomain:
-"azhagarsundar-70a3c.firebaseapp.com",
-
-databaseURL:
-"https://azhagarsundar-70a3c-default-rtdb.asia-southeast1.firebasedatabase.app",
-
-projectId:
-"azhagarsundar-70a3c",
-
-storageBucket:
-"azhagarsundar-70a3c.firebasestorage.app",
-
-messagingSenderId:
-"809335887617",
-
-appId:
-"1:809335887617:web:670e9f30a5b6c4734fed00",
-
-measurementId:
-"G-1E8TZ2CWRD"
-
+  apiKey: "AIzaSyDfECeMe-lm4aV8Ft8PAEBG1GQNFGuepl4",
+  authDomain: "azhagarsundar-70a3c.firebaseapp.com",
+  databaseURL: "https://azhagarsundar-70a3c-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "azhagarsundar-70a3c",
+  storageBucket: "azhagarsundar-70a3c.firebasestorage.app",
+  messagingSenderId: "809335887617",
+  appId: "1:809335887617:web:670e9f30a5b6c4734fed00",
+  measurementId: "G-1E8TZ2CWRD"
 };
 
-// INIT
-const app =
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const db  = getDatabase(app);
 
-const db =
-getDatabase(app);
+// Set today's date as default
+const eventDateInput = document.getElementById("eventDate");
+const today = new Date().toISOString().split("T")[0];
+eventDateInput.value = today;
 
-// ELEMENTS
-const nameList =
-document.getElementById("nameList");
+const nameList   = document.getElementById("nameList");
+const spokenText = document.getElementById("spokenText");
+const statusDot  = document.getElementById("statusDot");
+const statusText = document.getElementById("statusText");
+const countBadge = document.getElementById("countBadge");
 
-const spokenText =
-document.getElementById("spokenText");
+let names    = [];
+let fireKeys = [];
 
-const statusDiv =
-document.getElementById("status");
-
-let names = [];
-
-// LOAD NAMES
-function loadNames(){
-
-const guestRef =
-ref(db,"guestNames");
-
-onValue(
-guestRef,
-(snapshot)=>{
-
-nameList.innerHTML = "";
-
-names = [];
-
-const data =
-snapshot.val();
-
-let index = 0;
-
-for(let id in data){
-
-const item =
-data[id];
-
-names.push(item.name);
-
-const li =
-document.createElement("li");
-
-li.className =
-"name-item";
-
-li.innerHTML = `
-
-<input
-type="checkbox"
-id="check-${index}">
-
-<label>
-${item.name}
-</label>
-
-`;
-
-li.addEventListener(
-"click",
-(e)=>{
-
-if(
-e.target.tagName
-!== "INPUT"
-){
-
-const cb =
-li.querySelector(
-"input"
-);
-
-cb.checked =
-!cb.checked;
-
-li.classList.toggle(
-"selected",
-cb.checked
-);
-
+function getInitials(name) {
+  const parts = name.trim().split(" ");
+  return parts.length >= 2
+    ? (parts[0][0] + parts[1][0]).toUpperCase()
+    : name.substring(0, 2).toUpperCase();
 }
 
-});
-
-li.querySelector("input")
-.addEventListener(
-"change",
-(e)=>{
-
-li.classList.toggle(
-"selected",
-e.target.checked
-);
-
-});
-
-nameList.appendChild(li);
-
-index++;
-
+function updateCount() {
+  countBadge.textContent = names.length + " பேர்";
 }
 
-});
+function loadNames() {
+  const guestRef = ref(db, "guestNames");
+  onValue(guestRef, (snapshot) => {
+    nameList.innerHTML = "";
+    names    = [];
+    fireKeys = [];
+
+    const data = snapshot.val();
+    if (!data) {
+      nameList.innerHTML = '<li class="empty">பட்டியல் காலியாக உள்ளது. புதிய பெயர் சேர்க்கவும்.</li>';
+      updateCount();
+      return;
+    }
+
+    let index = 0;
+    for (let id in data) {
+      const item = data[id];
+      names.push(item.name);
+      fireKeys.push(id);
+
+      const li = document.createElement("li");
+      li.className = "name-card";
+      li.dataset.index = index;
+
+      li.innerHTML = `
+        <button class="delete-btn" title="நீக்கு" data-key="${id}">✕</button>
+        <div class="name-avatar">${getInitials(item.name)}</div>
+        <span class="name-label">${item.name}</span>
+        <div class="name-check"></div>
+      `;
+
+      li.addEventListener("click", (e) => {
+        if (e.target.closest(".delete-btn")) return;
+        li.classList.toggle("selected");
+      });
+
+      li.querySelector(".delete-btn").addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (confirm(`"${item.name}" ஐ நீக்கவா?`)) {
+          remove(ref(db, "guestNames/" + id));
+        }
+      });
+
+      nameList.appendChild(li);
+      index++;
+    }
+
+    updateCount();
+  });
 }
 
 loadNames();
 
-// ADD NAME
-document
-.getElementById("addBtn")
-.addEventListener(
-"click",
-()=>{
-
-const newName =
-prompt(
-"Enter New Name"
-);
-
-if(!newName) return;
-
-push(
-
-ref(
-db,
-"guestNames"
-),
-
-{
-name:newName
-}
-
-);
-
-alert(
-"✅ Name Added"
-);
-
+document.getElementById("addBtn").addEventListener("click", () => {
+  const newName = prompt("புதிய பெயரை உள்ளிடவும்:");
+  if (!newName || !newName.trim()) return;
+  push(ref(db, "guestNames"), { name: newName.trim() });
 });
 
-// SPEECH
-const SpeechRecognition =
-
-window.SpeechRecognition ||
-
-window.webkitSpeechRecognition;
-
-const recognition =
-new SpeechRecognition();
-
+// Speech
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
 recognition.continuous = true;
-
 recognition.interimResults = true;
-
 recognition.lang = "ta-IN";
 
 let listening = false;
 
-// START
-document
-.getElementById("startBtn")
-.addEventListener(
-"click",
-()=>{
-
-listening = true;
-
-recognition.start();
-
-statusDiv.innerHTML =
-"🎙 Listening continuously...";
-
+document.getElementById("startBtn").addEventListener("click", () => {
+  listening = true;
+  recognition.start();
+  statusDot.classList.add("active");
+  statusText.textContent = "🎙 தொடர்ச்சியாக கேட்கிறது...";
 });
 
-// STOP
-document
-.getElementById("stopBtn")
-.addEventListener(
-"click",
-()=>{
-
-listening = false;
-
-recognition.stop();
-
-statusDiv.innerHTML =
-"⏹ Voice stopped";
-
+document.getElementById("stopBtn").addEventListener("click", () => {
+  listening = false;
+  recognition.stop();
+  statusDot.classList.remove("active");
+  statusText.textContent = "⏹ குரல் நிறுத்தப்பட்டது";
 });
 
-// MATCH
-function similarMatch(
-spoken,
-actual
-){
-
-spoken =
-spoken.toLowerCase();
-
-actual =
-actual.toLowerCase();
-
-if(
-spoken.includes(actual)
-){
-return true;
+function similarMatch(spoken, actual) {
+  spoken = spoken.toLowerCase();
+  actual = actual.toLowerCase();
+  if (spoken.includes(actual)) return true;
+  const first = actual.split(" ")[0];
+  if (spoken.includes(first)) return true;
+  return false;
 }
 
-const first =
-actual.split(" ")[0];
+recognition.onresult = (event) => {
+  let transcript = "";
+  for (let i = event.resultIndex; i < event.results.length; i++) {
+    transcript += event.results[i][0].transcript + " ";
+  }
+  transcript = transcript.toLowerCase();
+  spokenText.textContent = transcript;
 
-if(
-spoken.includes(first)
-){
-return true;
-}
-
-return false;
-
-}
-
-// RESULT
-recognition.onresult =
-(event)=>{
-
-let transcript = "";
-
-for(
-
-let i =
-event.resultIndex;
-
-i <
-event.results.length;
-
-i++
-
-){
-
-transcript +=
-
-event.results[i][0]
-.transcript + " ";
-
-}
-
-transcript =
-transcript.toLowerCase();
-
-spokenText.innerHTML =
-transcript;
-
-names.forEach(
-(name,index)=>{
-
-if(
-
-similarMatch(
-transcript,
-name
-)
-
-){
-
-const checkbox =
-
-document
-.getElementById(
-
-`check-${index}`
-
-);
-
-checkbox.checked =
-true;
-
-checkbox.parentElement
-.classList.add(
-"selected"
-);
-
-}
-
-});
-
+  document.querySelectorAll(".name-card").forEach((card) => {
+    const idx  = parseInt(card.dataset.index);
+    const name = names[idx];
+    if (name && similarMatch(transcript, name)) {
+      card.classList.add("selected");
+    }
+  });
 };
 
-// AUTO RESTART
-recognition.onend = ()=>{
-
-if(listening){
-
-recognition.start();
-
-}
-
+recognition.onend = () => {
+  if (listening) recognition.start();
 };
 
-// PDF DOWNLOAD
-document
-.getElementById("downloadBtn")
-.addEventListener(
-"click",
-()=>{
+// PDF
+document.getElementById("downloadBtn").addEventListener("click", () => {
+  const selectedNames = [];
+  document.querySelectorAll(".name-card.selected .name-label").forEach(el => {
+    selectedNames.push(el.textContent.trim());
+  });
 
-const selectedNames = [];
+  if (selectedNames.length === 0) {
+    alert("⚠️ எந்த பெயரும் தேர்ந்தெடுக்கப்படவில்லை!\nதயவுசெய்து பெயர்களை tick செய்யவும்.");
+    return;
+  }
 
-names.forEach(
-(name,index)=>{
+  const rawDate = eventDateInput.value;
+  const dateObj = rawDate ? new Date(rawDate + "T00:00:00") : new Date();
+  const formattedDate = dateObj.toLocaleDateString("ta-IN", { year: "numeric", month: "long", day: "numeric" });
 
-const checkbox =
+  const pdfContent = document.createElement("div");
+  pdfContent.style.cssText = "padding:40px 50px;font-family:'Noto Sans Tamil',sans-serif;background:white;";
+  pdfContent.innerHTML =
+    '<div style="text-align:center;margin-bottom:0;">' +
+      '<h1 style="color:#166534;font-size:28px;font-weight:700;margin:0 0 8px;">C. \u0b85\u0bb4\u0b95\u0bb0\u0bcd\u0b9a\u0ba8\u0bcd\u0ba4\u0bb0\u0bcd \u0b95\u0bc7\u0b9f\u0bcd\u0b9f\u0bb0\u0bbf\u0b99\u0bcd &amp; \u0b9a\u0bb0\u0bcd\u0bb5\u0bc0\u0b9a\u0bcd</h1>' +
+      '<p style="color:#444;font-size:14px;margin:0 0 4px;">\u0baa\u0bb3\u0bc1\u0bb5\u0b9e\u0bcd\u0b9a\u0bbf, \u0bae\u0bb0\u0bc1\u0b99\u0bcd\u0b95\u0bbe\u0baa\u0bc1\u0bb0\u0bbf \u0ba4\u0bbe\u0bb2\u0bc1\u0b95\u0bbe, \u0ba4\u0bbf\u0bb0\u0bc1\u0b9a\u0bcd\u0b9a\u0bbf \u0bae\u0bbe\u0bb5\u0b9f\u0bcd\u0b9f\u0bae\u0bcd</p>' +
+      '<p style="font-weight:700;color:#b91c1c;font-size:14px;margin:0;">Cell : 9894271043 | 9944973450 | 7708759017</p>' +
+    '</div>' +
+    '<div style="border-top:2px solid #b91c1c;margin:16px 0 16px;"></div>' +
+    '<p style="font-size:14px;color:#166534;font-weight:700;margin:0 0 18px;">\u0ba4\u0bc7\u0ba4\u0bbf: ' + formattedDate + '</p>' +
+    '<ul style="list-style:disc;padding-left:24px;margin:0;">' +
+      selectedNames.map(function(name){ return '<li style="font-size:16px;color:#1c1917;margin-bottom:8px;padding-left:4px;">' + name + '</li>'; }).join("") +
+    '</ul>';
 
-document
-.getElementById(
-`check-${index}`
-);
-
-if(
-checkbox &&
-checkbox.checked
-){
-
-selectedNames.push(name);
-
-}
-
+  html2pdf().set({
+    margin: [0.4, 0.4, 0.4, 0.4],
+    filename: "C_Azhagarsundar_Catering_" + (rawDate || "list") + ".pdf",
+    image: { type: "jpeg", quality: 1 },
+    html2canvas: { scale: 2, useCORS: true },
+    jsPDF: { unit: "in", format: "a4", orientation: "portrait" }
+  }).from(pdfContent).save();
 });
 
-const pdfContent =
-
-document.createElement("div");
-
-pdfContent.style.padding =
-"30px";
-
-pdfContent.style.fontFamily =
-"'Noto Sans Tamil', sans-serif";
-
-pdfContent.innerHTML = `
-
-<div
-style="
-text-align:center;
-border-bottom:2px solid #b91c1c;
-padding-bottom:20px;
-margin-bottom:20px;
-">
-
-<h1
-style="
-color:#166534;
-margin-bottom:10px;
-">
-C. அழகர்சந்தர்
-கேட்டரிங் & சர்வீஸ்
-</h1>
-
-<p>
-  பளுவஞ்சி, மருங்காபுரி தாலுகா, திருச்சி மாவட்டம்
-</p>
-
-<p
-style="
-margin-top:10px;
-font-weight:bold;
-color:#b91c1c;
-">
-Cell :
-9894271043 |
-9944973450 |
-7708759017
-</p>
-
-</div>
-
-<h2
-style="
-color:#166534;
-margin-bottom:20px;
-">
-
-</h2>
-
-<ul>
-
-${selectedNames.map(name => `
-
-<li
-style="
-margin-bottom:10px;
-font-size:18px;
-">
-${name}
-</li>
-
-`).join("")}
-
-</ul>
-
-`;
-
-html2pdf()
-
-.set({
-
-margin:0.5,
-
-filename:
-"C_Azhagarsundar_Catering.pdf",
-
-image:{
-type:"jpeg",
-quality:1
-},
-
-html2canvas:{
-scale:2
-},
-
-jsPDF:{
-unit:"in",
-format:"a4",
-orientation:"portrait"
-}
-
-})
-
-.from(pdfContent)
-
-.save();
-
+// Clear
+document.getElementById("clearBtn").addEventListener("click", () => {
+  document.querySelectorAll(".name-card").forEach(card => card.classList.remove("selected"));
+  spokenText.textContent = "---";
 });
-
-// CLEAR
-document
-.getElementById("clearBtn")
-.addEventListener(
-"click",
-()=>{
-
-document
-
-.querySelectorAll(
-"input[type='checkbox']"
-)
-
-.forEach((cb)=>{
-
-cb.checked = false;
-
-cb.parentElement
-.classList.remove(
-"selected"
-);
-
-});
-
-spokenText.innerHTML =
-"---";
-
-});
-
 </script>
-
 </body>
 </html>
